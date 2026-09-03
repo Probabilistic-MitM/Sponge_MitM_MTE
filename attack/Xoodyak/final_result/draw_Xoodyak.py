@@ -152,8 +152,7 @@ for round_state_output in intermediate_states_output:
                     theta_without_place[z][y][x] = 1
     latex_code += generate_tikz_code_without(theta[0], theta[1],theta_without_place,add_bit=add_bit, index_row=theta[2], name=theta[3],first_slice=first_slice, last_slice=last_slice)
 
-    if 'rho_west_state' not in round_state_output:
-        continue
+    
     rho_west = round_state_output['rho_west_state']
     new_delta_r, new_delta_b = state_delta(first_slice, last_slice, rho_west)
     add_bit = [-1 * len(new_delta_r), -1 * len(new_delta_b)]
@@ -164,7 +163,8 @@ for round_state_output in intermediate_states_output:
     rho_west_without = rho_west_f(theta_without_place)
     latex_code += generate_tikz_code_without(rho_west[0], rho_west[1],rho_west_without,add_bit=add_bit, index_row=rho_west[2], name=rho_west[3],first_slice=first_slice, last_slice=last_slice)
 
-
+    if 'chi_state' not in round_state_output:
+        continue
     chi = round_state_output['chi_state']
     new_delta_r, new_delta_b = state_delta(first_slice, last_slice, chi)
     add_bit = [-1 * len(new_delta_r), -1 * len(new_delta_b)]
