@@ -79,13 +79,14 @@ for round_num in range(num_rounds):
         theta_state, C, D, theta_vars,linear_cancel = create_first_theta_operation(model,current_state,f"round{round_num}_theta")
     else:
         theta_state, C, D, theta_vars,linear_cancel= create_theta_operation(model, current_state, f"round{round_num}_theta")
+    rho_west_state = rho_west(theta_state)
     if round_num == num_rounds-1:
         intermediate_states.append({
             'theta_state': theta_state,
             'theta_vars': theta_vars,
             'C':C,
             'D':D,
-            'rho_west_state': None,
+            'rho_west_state': rho_west_state,
             'chi_state': None,
             'chi_vars': None,
             'rho_east_state': None,
@@ -95,9 +96,9 @@ for round_num in range(num_rounds):
             "linear_cancel_chi": None
 
         })
-        current_state = theta_state
+        current_state = rho_west_state
         break
-    rho_west_state = rho_west(theta_state)
+    
     if round_num == 0:
         chi_state, chi_vars,without_place,linear_cancel_chi  = create_first_chi_operation(model, rho_west_state, f"round{round_num}_chi")
     else:
@@ -283,14 +284,15 @@ with open(f"../final_result/Xoodyak_round_{num_rounds}_preimage_for_painting.py"
         round_state_output['theta_state'] = temp
 
         rho_west = round_state['rho_west_state']
-        if rho_west==None:
-            intermediate_states_output.append(round_state_output)
-            continue
+        
         row_num += 1
         temp = write_row(rho_west, row_num, f'${{\\rho_{{west}}}}^{{({index})}}$')
         round_state_output['rho_west_state'] = temp
         row_num += 0.8
         chi = round_state['chi_state']
+        if chi==None:
+            intermediate_states_output.append(round_state_output)
+            continue
         temp = write_row_chi(chi, row_num, chi_vars, linear_cancel_chi, f'$\\chi^{{({index})}}$')
         round_state_output['chi_state'] = temp
         row_num += 1
