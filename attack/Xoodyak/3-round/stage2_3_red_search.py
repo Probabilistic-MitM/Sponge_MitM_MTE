@@ -66,21 +66,23 @@ for key in all_solutions.keys():
                 theta_state, C, D, theta_vars = create_first_theta_operation(model,current_state,f"round{round_num}_theta")
             else:
                 theta_state, C, D, theta_vars = create_theta_operation(model, current_state, f"round{round_num}_theta")
+            rho_west_state = rho_west(theta_state)
+            
             if round_num == num_rounds-1:
+                current_state = rho_west_state
                 intermediate_states.append({
                     'theta_state': theta_state,
                     'theta_vars': theta_vars,
                     'C':C,
                     'D':D,
-                    'rho_west_state': None,
+                    'rho_west_state': theta_state,
                     'chi_state': None,
                     'chi_vars': None,
                     'rho_east_state': None,
                     'round_num': round_num
                 })
-                current_state = theta_state
                 break
-            rho_west_state = rho_west(theta_state)
+            
             if round_num == 0:
                 chi_state, chi_vars = create_first_chi_operation(model,rho_west_state,f"round{round_num}_chi")
             else:
@@ -235,14 +237,15 @@ for key in all_solutions.keys():
             round_state_output['theta_state'] = temp
 
             rho_west_state = round_state['rho_west_state']
-            if rho_west_state==None:
-                intermediate_states_output.append(round_state_output)
-                continue
+            
             row_num += 1
             temp = write_row(rho_west_state, row_num, f'$\\rho_west_state{index}$')
             round_state_output['rho_west_state'] = temp
             row_num += 1
             chi = round_state['chi_state']
+            if chi==None:
+                intermediate_states_output.append(round_state_output)
+                continue
             temp = write_row_chi(chi, row_num, chi_vars, f'$\\chi_{index}$')
             round_state_output['chi_state'] = temp
             row_num += 1
