@@ -16,7 +16,7 @@ This folder contains code for meet-in-the-middle (MitM) attacks, including trail
 
 - **`Xoodyak/`**  
   Trail search and drawing code for:
-  - 3–/4-round Xoodyak-XOF collision and preimage attacks
+  - 4-round Xoodyak-XOF preimage attack
 
 - **`Experiment/`**  
   Verification experiment code including trail search, implementation of the preimage attack search process, and drawing utilities.
